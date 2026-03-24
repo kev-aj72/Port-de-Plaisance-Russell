@@ -87,30 +87,37 @@ exports.delete = async (req, res) => {
     }
 }
 
-exports.authenticate = async (req, res, next) => {
+exports.authenticate = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log("Body reçu:", req.body);
+        let user = await User.findOne({ email: email }, '-__v -createdAt -updatedAt');
 
-        const user = await User.findOne({ email }, '-__v -createdAt -updatedAt');
-        console.log("User trouvé:", user);
-        if (!user) return res.render('index', { error: 'Utilisateur non trouvé' });
+        if (user) {
+            bcrypt.compare(password, user.password, function(err, response) {
+                if (err){
+                    throw new Error(err);
+                }
+            if (response) {
+                delete user._doc.password;
 
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return res.render('index', { error: 'Mot de passe incorrect' });
-
-        const userObj = user.toObject();
-        delete userObj.password;
-
-        const token = jwt.sign({ user: userObj }, SECRET_KEY, { expiresIn: '24h' });
+                const expireIn = 24 * 60 * 60;
+                const token    = jwt.sign(
+                    {user: user},
+                    SECRET_KEY,
+                    {expiresIn: expireIn}
+                );
 
         res.cookie('token', token, { httpOnly: true });
-         // Redirection vers dashboard
         return res.redirect('/dashboard');
-
-    } catch (error) {
-        console.error("Erreur authenticate:", error);
-        return res.status(500).json({ message: 'server_error', error: error.message });
+            }
+        
+            return res.status(403).json('wrong-credentials');
+        });
+    } else {
+        return res.status(404).json('user_not_found');
     }
+} catch (error) {
+    return res.status(501).json(error);
+}
 };

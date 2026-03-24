@@ -28,9 +28,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/users',userRoute);
-app.use('/catways', catwayRoute);
-app.use('/reservations', reservationRoute);
+app.use('/api/users',userRoute);
+app.use('/api/catways', catwayRoute);
+app.use('/api/reservations', reservationRoute);
 app.use('/', indexRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
