@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors   = require ('cors');
-
+const usersService = require('./services/users');
 const indexRouter = require('./routes/index');
 const userRoute = require('./routes/users');
 const catwayRoute = require('./routes/catways');
@@ -28,9 +28,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/users',userRoute);
-app.use('/api/catways', catwayRoute);
-app.use('/api/reservations', reservationRoute);
+app.post('/login', usersService.authenticate);
+app.use('/users', userRoute);
+app.use('/catways', catwayRoute);
+app.use('/reservations', reservationRoute);
+
 app.use('/', indexRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {

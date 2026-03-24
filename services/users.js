@@ -41,10 +41,10 @@ console.log("Tentative d'ajout d'utilisateur:", temp);
     try {
         let user = await User.create(temp);
  console.log("Utilisateur ajouté avec succès:", user);
-        return res.redirect('/users');
+        return res.redirect('/app/users');
     } catch (error) {
          console.error("Erreur lors de l'ajout de l'utilisateur:", error);
-        return res.render('index', { error: 'Impossible de créer l utilisateur'});
+        return res.render('index', { title: 'Accueil', error: 'Impossible de créer l utilisateur' });
     }
 }
 
@@ -147,10 +147,10 @@ exports.authenticate = async (req, res) => {
         return res.redirect('/dashboard');
             }
         
-            return res.render('index', { error: 'Email ou mot de passe incorrect' });
+            return res.render('index', { title: 'Accueil', error: 'Email ou mot de passe incorrect' });
         });
     } else {
-        return res.render('index', { error: 'Utilisateur non trouvé' });
+            return res.render('index', { title: 'Accueil', error: 'Utilisateur non trouvé' });
     }
 } catch (error) {
     return res.status(501).json(error);

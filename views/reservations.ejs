@@ -10,9 +10,9 @@
         <nav>
             <ul>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/users">Utilisateur</a></li>
-                <li><a href="/catways">Catways</a></li>
-                <li><a href="/reservations">Réservation</a></li>
+                <li><a href="/app/users">Utilisateur</a></li>
+                <li><a href="/app/catways">Catways</a></li>
+                <li><a href="/app/reservations">Réservation</a></li>
             </ul>
         </nav>
     </header>
@@ -34,7 +34,7 @@
   <tbody>
     <% reservations.forEach(reservation => { %>
       <tr>
-        <td><a href="/reservations/<%= reservation._id %>">Voir</a></td>
+        <td><a href="/app/reservations/<%= reservation._id %>">Voir</a></td>
         <td><%= reservation.catwayNumber %></td>
         <td><%= reservation.clientName %></td>
         <td><%= reservation.boatName %></td>

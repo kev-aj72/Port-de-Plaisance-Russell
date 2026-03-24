@@ -12,7 +12,27 @@ router.get('/', async (req, res, next) => {
  res.render('index', { title: 'Accueil', error: null })
 });
 
-router.get('/catways', private.checkJWT, async (req, res) => {
+
+
+router.get('/dashboard', private.checkJWT, async (req, res) => {
+  try {
+    const today = new Date();
+
+    const reservations = await Reservations.find().sort({catwayNumber: 1}); 
+
+    res.render('dashboard', {
+      title: 'dashboard',
+      user: req.user,
+      today: today.toLocaleDateString('fr-FR'),
+      reservations: reservations
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur dashboard');
+  }
+});
+
+router.get('/app/catways', private.checkJWT, async (req, res) => {
   try {
     const catways = await Catways.find().sort({ catwayNumber: 1});
 
@@ -27,7 +47,7 @@ router.get('/catways', private.checkJWT, async (req, res) => {
   }
 });
 
-router.get('/catways/:id', private.checkJWT, async (req, res) => {
+router.get('/app/catways/:id', private.checkJWT, async (req, res) => {
   try {
     const catway = await Catways.findById(req.params.id);
 
@@ -37,7 +57,7 @@ router.get('/catways/:id', private.checkJWT, async (req, res) => {
 
     const reservations = await Reservations.find({
       catwayNumber: catway.catwayNumber
-    });
+    }).sort({ startDate: 1 });
 
     res.render('catway', {
       title: 'Détail du catway',
@@ -51,38 +71,7 @@ router.get('/catways/:id', private.checkJWT, async (req, res) => {
   }
 });
 
-router.post('/catways/:id/edit', private.checkJWT, async (req, res) => {
-  try {
-    const catway = await Catways.findById(req.params.id);
-
-    if (!catway) {
-      return res.status(404).send('Catway non trouvé');
-    }
-
-    catway.catwayNumber = req.body.catwayNumber;
-    catway.catwayType = req.body.catwayType;
-    catway.catwayState = req.body.catwayState;
-
-    await catway.save();
-
-    res.redirect('/catways/' + catway._id);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Erreur mise à jour catway');
-  }
-});
-
-router.post('/catways/:id/delete', private.checkJWT, async (req, res) => {
-  try {
-    await Catways.findByIdAndDelete(req.params.id);
-    res.redirect('/catways');
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Erreur suppression catway');
-  }
-});
-
-router.get('/reservations', private.checkJWT, async (req, res) => {
+router.get('/app/reservations', private.checkJWT, async (req, res) => {
    try {
     const reservations = await Reservations.find().sort({
     catwayNumber: 1,
@@ -100,7 +89,7 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
   }
 });
 
-router.get('/reservations/:id', private.checkJWT, async (req, res) => {
+router.get('/app/reservations/:id', private.checkJWT, async (req, res) => {
   try {
     const reservation = await Reservations.findById(req.params.id);
 
@@ -119,7 +108,7 @@ router.get('/reservations/:id', private.checkJWT, async (req, res) => {
   }
 });
 
-router.get('/users', private.checkJWT, async (req, res) => {
+router.get('/app/users', private.checkJWT, async (req, res) => {
   try {
     const users = await User.find().select('-password');
 
@@ -134,7 +123,7 @@ router.get('/users', private.checkJWT, async (req, res) => {
   }
 });
 
-router.get('/users/:email', private.checkJWT, async (req, res) => {
+router.get('/app/users/:email', private.checkJWT, async (req, res) => {
   try {
     const userItem = await User.findOne({ email: req.params.email }).select('-password');
 
@@ -154,22 +143,5 @@ router.get('/users/:email', private.checkJWT, async (req, res) => {
   }
 });
 
-router.get('/dashboard', private.checkJWT, async (req, res) => {
-  try {
-    const today = new Date();
-
-    const reservations = await Reservations.find().sort({startDate: 1}); 
-
-    res.render('dashboard', {
-      title: 'dashboard',
-      user: req.user,
-      today: today.toLocaleDateString('fr-FR'),
-      reservations: reservations
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Erreur dashboard');
-  }
-});
 
 module.exports = router;

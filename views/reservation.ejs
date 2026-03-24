@@ -10,9 +10,9 @@
         <nav>
             <ul>
                 <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/users">Utilisateur</a></li>
-                <li><a href="/catways">Catways</a></li>
-                <li><a href="/reservations">Réservation</a></li>
+                <li><a href="/app/users">Utilisateur</a></li>
+                <li><a href="/app/catways">Catways</a></li>
+                <li><a href="/app/reservations">Réservation</a></li>
             </ul>
         </nav>
     </header>
@@ -71,7 +71,7 @@
         </table>
 
         <br>
-        <a href="/reservations">Retour</a>
+        <a href="/app/reservations">Retour</a>
     </main>
 
 <script>
@@ -84,7 +84,7 @@
         };
 
         try {
-            const res = await fetch('/api/reservations/' + id, {
+            const res = await fetch('/reservations/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -107,7 +107,7 @@
         if (!confirm('Supprimer ?')) return;
 
         try {
-            const res = await fetch('/api/reservations/' + id + '/delete', {
+            const res = await fetch('/reservations/' + id , {
                 method: 'DELETE'
             });
 
@@ -117,7 +117,7 @@
             if (!res.ok) throw new Error(result);
 
             alert('Supprimé ');
-            window.location.href = '/reservations';
+            window.location.href = '/app/reservations';
         } catch (error) {
             console.error('Erreur suppression :', error);
             alert('Erreur suppression ');
