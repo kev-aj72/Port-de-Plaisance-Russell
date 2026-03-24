@@ -41,10 +41,10 @@ console.log("Tentative d'ajout d'utilisateur:", temp);
     try {
         let user = await User.create(temp);
  console.log("Utilisateur ajouté avec succès:", user);
-        return res.status(201).json(user);
+        return res.redirect('/');
     } catch (error) {
          console.error("Erreur lors de l'ajout de l'utilisateur:", error);
-        return res.status(501).json(error);
+        return res.render('index', { error: 'Impossible de créer l utilisateur', error});
     }
 }
 
@@ -95,20 +95,19 @@ exports.authenticate = async (req, res, next) => {
 
         const user = await User.findOne({ email }, '-__v -createdAt -updatedAt');
         console.log("User trouvé:", user);
-        if (!user) return res.status(404).json({ message: 'user_not_found' });
+        if (!user) return res.render('index', { error: 'Utilisateur non trouvé' });
 
-        console.log("Password stocké:", user.password);
         const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return res.status(403).json({ message: 'wrong_credentials' });
+        if (!valid) return res.render('index', { error: 'Mot de passe incorrect' });
 
         const userObj = user.toObject();
         delete userObj.password;
 
-        console.log("SECRET_KEY:", SECRET_KEY);
         const token = jwt.sign({ user: userObj }, SECRET_KEY, { expiresIn: '24h' });
 
-        res.header('Authorization', 'Bearer ' + token);
-        return res.status(200).json({ message: 'authenticate_succeed', token });
+        res.cookie('token', token, { httpOnly: true });
+         // Redirection vers dashboard
+        return res.redirect('/dashboard');
 
     } catch (error) {
         console.error("Erreur authenticate:", error);
