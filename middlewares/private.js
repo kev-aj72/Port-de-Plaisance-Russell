@@ -2,24 +2,19 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY || 'monsecret123';
 
 exports.checkJWT = async (req, res, next) => {
-    try {
-        let token = req.headers['x-access-token'] || req.headers['authorization'];
-        if (token && token.startsWith('Bearer ')) {
-            token = token.slice(7, token.length);
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.redirect('/');
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.redirect('/');
         }
 
-        if (!token) return res.status(401).json({ message: 'token_required' });
-
-        const decoded = jwt.verify(token, SECRET_KEY);
-        req.decoded = decoded;
-
-        // Renouvellement du token
-        const newToken = jwt.sign({ user: decoded.user }, SECRET_KEY, { expiresIn: 24 * 60 * 60 });
-        res.header('Authorization', 'Bearer ' + newToken);
+        req.user = decoded.user;
 
         next();
-    } catch (err) {
-        console.error('JWT error:', err);
-        return res.status(401).json({ message: 'token_not_valid' });
-    }
+    });
 };

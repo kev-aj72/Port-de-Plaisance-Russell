@@ -18,26 +18,26 @@
     </header>
 
     <main>
-       <h2>Catways</h2>
+       
+       <h2>Users</h2>
 
 <table border="1">
   <thead>
     <tr>
-      <th>Numéro du catway</th>
-      <th>Type de catway</th>
-      <th>État du catway</th>
+      <th>Nom</th>
+      <th>Email</th>
     </tr>
   </thead>
   <tbody>
-    <% catways.forEach(catway => { %>
+    <% users.forEach(userItem => { %>
       <tr>
-        <td><%= catway.catwayNumber %></td>
-        <td><%= catway.catwayType %></td>
-        <td><%= catway.catwayState %></td>
+        <td><%= userItem.username %></td>
+        <td><%= userItem.email %></td>
       </tr>
     <% }) %>
   </tbody>
 </table>
+       
     </main>
     
 </body>
