@@ -1,4 +1,7 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
+const jwt    = require('jsonwebtoken');
+const SECRET_KEY = process.env.SECRET_KEY
 
 
 exports.getAllUsers = async (req, res) => {
@@ -83,3 +86,32 @@ exports.delete = async (req, res) => {
         return res.status(501).json(error);
     }
 }
+
+exports.authenticate = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        console.log("Body reçu:", req.body);
+
+        const user = await User.findOne({ email }, '-__v -createdAt -updatedAt');
+        console.log("User trouvé:", user);
+        if (!user) return res.status(404).json({ message: 'user_not_found' });
+
+        console.log("Password stocké:", user.password);
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) return res.status(403).json({ message: 'wrong_credentials' });
+
+        const userObj = user.toObject();
+        delete userObj.password;
+
+        console.log("SECRET_KEY:", SECRET_KEY);
+        const token = jwt.sign({ user: userObj }, SECRET_KEY, { expiresIn: '24h' });
+
+        res.header('Authorization', 'Bearer ' + token);
+        return res.status(200).json({ message: 'authenticate_succeed', token });
+
+    } catch (error) {
+        console.error("Erreur authenticate:", error);
+        return res.status(500).json({ message: 'server_error', error: error.message });
+    }
+};
