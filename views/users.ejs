@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer une API pour le Port de Plaisance Russell</title>
+    <title>Utilisateurs</title>
 </head>
 <body>
     <header>
@@ -18,27 +18,39 @@
     </header>
 
     <main>
-       
-       <h2>Users</h2>
+        <h2>Users</h2>
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% users.forEach(userItem => { %>
-      <tr>
-        <td><%= userItem.username %></td>
-        <td><%= userItem.email %></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
-       
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(userItem => { %>
+                    <tr>
+                      <td>
+                            <a href="/users/<%= encodeURIComponent(userItem.email) %>">Voir</a>
+                        </td>
+                        <td><%= userItem.username %></td>
+                        <td><%= userItem.email %></td>
+                        
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <h2>Créer un utilisateur</h2>
+
+        <form action="/api/users" method="POST">
+            <input type="text" name="username" placeholder="Nom" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Créer</button>
+        </form>
     </main>
-    
 </body>
 </html>

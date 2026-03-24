@@ -23,6 +23,7 @@
 <table border="1">
   <thead>
     <tr>
+      <th>Voir le catway </th>
       <th>Numéro du catway</th>
       <th>Type de catway</th>
       <th>État du catway</th>
@@ -31,6 +32,7 @@
   <tbody>
     <% catways.forEach(catway => { %>
       <tr>
+        <td><a href="/catways/<%= catway._id %>">Voir</a></td>
         <td><%= catway.catwayNumber %></td>
         <td><%= catway.catwayType %></td>
         <td><%= catway.catwayState %></td>
@@ -38,6 +40,27 @@
     <% }) %>
   </tbody>
 </table>
+
+<form action="/api/catways" method="POST">
+    <div>
+        <label for="catwayNumber">Numéro du catway</label>
+        <input type="text" id="catwayNumber" name="catwayNumber" required>
+    </div>
+
+    <div>
+        <label for="catwayType">Type de catway</label>
+        <input type="text" id="catwayType" name="catwayType" required>
+    </div>
+
+    <div>
+        <label for="catwayState">État du catway</label>
+        <input type="text" id="catwayState" name="catwayState" required>
+    </div>
+
+    <button type="submit">Ajouter</button>
+</form>
+
+<br>
     </main>
     
 </body>

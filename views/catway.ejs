@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail du catway</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/users">Utilisateur</a></li>
+            <li><a href="/catways">Catways</a></li>
+            <li><a href="/reservations">Réservation</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <h1>Détail du catway</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Numéro</th>
+            <th>Type</th>
+            <th>État</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input type="text" id="catwayNumber" value="<%= catway.catwayNumber %>" readonly>
+            </td>
+            <td>
+                <input type="text" id="catwayType" value="<%= catway.catwayType %>">
+            </td>
+            <td>
+                <input type="text" id="catwayState" value="<%= catway.catwayState %>">
+            </td>
+            <td>
+                <button onclick="updateCatway('<%= catway._id %>')">Enregistrer</button>
+                <button onclick="deleteCatway('<%= catway._id %>')">Supprimer</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    <h2>Réservations du catway</h2>
+
+    <% if (reservations && reservations.length > 0) { %>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Bateau</th>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reservations.forEach(reservation => { %>
+                    <tr>
+                        <td>
+                            <input
+                                type="text"
+                                id="clientName-<%= reservation._id %>"
+                                value="<%= reservation.clientName %>"
+                            >
+                        </td>
+                        <td>
+                            <input
+                                type="text"
+                                id="boatName-<%= reservation._id %>"
+                                value="<%= reservation.boatName %>"
+                            >
+                        </td>
+                        <td>
+                            <input
+                                type="date"
+                                id="startDate-<%= reservation._id %>"
+                                value="<%= reservation.startDate ? new Date(reservation.startDate).toISOString().split('T')[0] : '' %>"
+                            >
+                        </td>
+                        <td>
+                            <input
+                                type="date"
+                                id="endDate-<%= reservation._id %>"
+                                value="<%= reservation.endDate ? new Date(reservation.endDate).toISOString().split('T')[0] : '' %>"
+                            >
+                        </td>
+                        <td>
+                            <button onclick="updateReservation('<%= reservation._id %>')">
+                                Enregistrer
+                            </button>
+
+                            <button onclick="deleteReservation('<%= reservation._id %>')">
+                                Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Aucune réservation pour ce catway.</p>
+    <% } %>
+
+    <h2>Ajouter une réservation</h2>
+
+    <form action="/api/reservations" method="POST">
+        <input type="hidden" name="catwayNumber" value="<%= catway.catwayNumber %>">
+
+        <input type="text" name="clientName" placeholder="Nom du client" required>
+        <input type="text" name="boatName" placeholder="Nom du bateau" required>
+        <input type="date" name="startDate" required>
+        <input type="date" name="endDate" required>
+
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <br>
+    <a href="/catways">Retour</a>
+</main>
+
+<script>
+    async function updateReservation(id) {
+        const data = {
+            clientName: document.getElementById('clientName-' + id).value,
+            boatName: document.getElementById('boatName-' + id).value,
+            startDate: document.getElementById('startDate-' + id).value,
+            endDate: document.getElementById('endDate-' + id).value
+        };
+
+        try {
+            const res = await fetch('/api/reservations/' + id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.text();
+            console.log('Réponse update :', result);
+
+            if (!res.ok) throw new Error(result);
+
+            alert('Modifié');
+            window.location.reload();
+        } catch (error) {
+            console.error('Erreur modification :', error);
+            alert('Erreur modification');
+        }
+    }
+
+    async function deleteReservation(id) {
+        if (!confirm('Supprimer ?')) return;
+
+        try {
+            const res = await fetch('/api/reservations/' + id + '/delete', {
+                method: 'DELETE'
+            });
+
+            const result = await res.text();
+            console.log('Réponse delete :', result);
+
+            if (!res.ok) throw new Error(result);
+
+            alert('Supprimé');
+            window.location.reload();
+        } catch (error) {
+            console.error('Erreur suppression :', error);
+            alert('Erreur suppression');
+        }
+    }
+</script>
+
+<script>
+    async function updateCatway(id) {
+        const data = {
+            catwayNumber: document.getElementById('catwayNumber').value,
+            catwayType: document.getElementById('catwayType').value,
+            catwayState: document.getElementById('catwayState').value
+        };
+
+        try {
+            const res = await fetch('/api/catways/' + id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!res.ok) throw new Error();
+
+            alert('Catway modifié');
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert('Erreur modification catway');
+        }
+    }
+
+    async function deleteCatway(id) {
+        const ok = confirm('Supprimer ce catway ?');
+        if (!ok) return;
+
+        try {
+            const res = await fetch('/api/catways/' + id, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) throw new Error();
+
+            window.location.href = '/catways';
+        } catch (error) {
+            console.error(error);
+            alert('Erreur suppression catway');
+        }
+    }
+</script>
+</body>
+</html>

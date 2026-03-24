@@ -1,5 +1,5 @@
 const Catways = require('../models/catway');
-
+const Reservation= require('../models/reservation');
 
 exports.getAllCatway = async (req, res) => {
     try {
@@ -35,50 +35,65 @@ exports.add = async (req, res, next) => {
     });
 
     try {
-        let catway = await Catways.create(temp);
+        await Catways.create(temp);
 
-        return res.status(201).json(catway);
+        return res.redirect('/catways');
     } catch (error) {
         console.log(error);
         return res.status(501).json(error);
     }
 }
 
+
 exports.update = async (req, res, next) => {
-    const Id = req.params.id
-    const temp = ({
-        catwayNumber   : req.body.catwayNumber,
-        catwayType     : req.body.catwayType,
-        catwayState    : req.body.catwayState
-    });
+    const Id = req.params.id;
+    const temp = {
+        catwayNumber: req.body.catwayNumber,
+        catwayType: req.body.catwayType,
+        catwayState: req.body.catwayState
+    };
 
     try {
-        let catway = await Catways.findOne({_id : Id});
+        let catway = await Catways.findOne({ _id: Id });
         
-        if (catway) {
-            Object.keys(temp).forEach((key) => {
-                if (!!temp[key]) {
-                    catway[key] = temp[key];
-                }
-            });
-
-            await catway.save();
-            return res.status(201).json(catway);
+        if (!catway) {
+            return res.status(404).json({ message: 'catway_not_found' });
         }
-        return res.status(404).json('catway_not_found');
+
+        Object.keys(temp).forEach((key) => {
+            if (temp[key]) {
+                catway[key] = temp[key];
+            }
+        });
+
+        await catway.save();
+
+        return res.status(200).json({ message: 'update_ok' });
     } catch (error) {
-        return res.status(501).json(error);
+        console.log(error);
+        return res.status(500).json({ message: 'server_error' });
     }
-}
+};
+
 
 exports.delete = async (req, res, next) => {
-    const Id = req.params.id
+    const Id = req.params.id;
     
     try {
-        await Catways.deleteOne({_id : Id});
+        const catway = await Catways.findOne({ _id: Id });
 
-        return res.status(204).json('delete_ok');
+        if (!catway) {
+            return res.status(404).json({ message: 'catway_not_found' });
+        }
+          await Reservation.deleteMany({
+            catwayNumber: catway.catwayNumber
+        });
+
+        await Catways.deleteOne({ _id: Id });
+
+        return res.status(200).json({ message: 'delete_ok' });
     } catch (error) {
-        return res.status(501).json(error);
+        console.log(error);
+        return res.status(500).json({ message: 'server_error' });
     }
-}
+};

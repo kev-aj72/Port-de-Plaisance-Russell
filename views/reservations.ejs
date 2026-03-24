@@ -23,6 +23,7 @@
 <table border="1">
   <thead>
     <tr>
+      <th>Voir</th>
       <th>Catway</th>
       <th>Client</th>
       <th>Bateau</th>
@@ -33,6 +34,7 @@
   <tbody>
     <% reservations.forEach(reservation => { %>
       <tr>
+        <td><a href="/reservations/<%= reservation._id %>">Voir</a></td>
         <td><%= reservation.catwayNumber %></td>
         <td><%= reservation.clientName %></td>
         <td><%= reservation.boatName %></td>

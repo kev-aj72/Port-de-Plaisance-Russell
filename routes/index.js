@@ -3,15 +3,18 @@ const router = express.Router();
 const private = require('../middlewares/private');
 const Reservations = require('../models/reservation');
 const Catways = require('../models/catway');
-const Users = require('../models/user');
+const User = require('../models/user');
+
+
+
 /* GET home page. */
 router.get('/', async (req, res, next) => {
-  res.render('index', { title: 'Accueil' })
+ res.render('index', { title: 'Accueil', error: null })
 });
 
 router.get('/catways', private.checkJWT, async (req, res) => {
   try {
-    const catways = await Catways.find();
+    const catways = await Catways.find().sort({ catwayNumber: 1});
 
     res.render('catways', {
       title: 'Catways',
@@ -24,9 +27,67 @@ router.get('/catways', private.checkJWT, async (req, res) => {
   }
 });
 
+router.get('/catways/:id', private.checkJWT, async (req, res) => {
+  try {
+    const catway = await Catways.findById(req.params.id);
+
+    if (!catway) {
+      return res.status(404).send('Catway non trouvé');
+    }
+
+    const reservations = await Reservations.find({
+      catwayNumber: catway.catwayNumber
+    });
+
+    res.render('catway', {
+      title: 'Détail du catway',
+      user: req.user,
+      catway: catway,
+      reservations: reservations
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur catway');
+  }
+});
+
+router.post('/catways/:id/edit', private.checkJWT, async (req, res) => {
+  try {
+    const catway = await Catways.findById(req.params.id);
+
+    if (!catway) {
+      return res.status(404).send('Catway non trouvé');
+    }
+
+    catway.catwayNumber = req.body.catwayNumber;
+    catway.catwayType = req.body.catwayType;
+    catway.catwayState = req.body.catwayState;
+
+    await catway.save();
+
+    res.redirect('/catways/' + catway._id);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur mise à jour catway');
+  }
+});
+
+router.post('/catways/:id/delete', private.checkJWT, async (req, res) => {
+  try {
+    await Catways.findByIdAndDelete(req.params.id);
+    res.redirect('/catways');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur suppression catway');
+  }
+});
+
 router.get('/reservations', private.checkJWT, async (req, res) => {
    try {
-    const reservations = await Reservations.find();
+    const reservations = await Reservations.find().sort({
+    catwayNumber: 1,
+    startDate: 1
+});
 
     res.render('reservations', {
       title: 'Reservation',
@@ -39,13 +100,31 @@ router.get('/reservations', private.checkJWT, async (req, res) => {
   }
 });
 
+router.get('/reservations/:id', private.checkJWT, async (req, res) => {
+  try {
+    const reservation = await Reservations.findById(req.params.id);
+
+    if (!reservation) {
+      return res.status(404).send('Réservation non trouvée');
+    }
+
+    res.render('reservation', {
+      title: 'Détail de la réservation',
+      user: req.user,
+      reservation: reservation
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur réservation');
+  }
+});
 
 router.get('/users', private.checkJWT, async (req, res) => {
-   try {
-    const users = await Users.find();
+  try {
+    const users = await User.find().select('-password');
 
     res.render('users', {
-      title: 'users',
+      title: 'Users',
       user: req.user,
       users: users
     });
@@ -55,11 +134,31 @@ router.get('/users', private.checkJWT, async (req, res) => {
   }
 });
 
+router.get('/users/:email', private.checkJWT, async (req, res) => {
+  try {
+    const userItem = await User.findOne({ email: req.params.email }).select('-password');
+
+    if (!userItem) {
+      return res.status(404).send('Utilisateur introuvable');
+    }
+
+    res.render('user', {
+      title: 'Détail utilisateur',
+      user: req.user,
+      userItem: userItem,
+      connectedEmail: req.user.email
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Erreur user');
+  }
+});
+
 router.get('/dashboard', private.checkJWT, async (req, res) => {
   try {
     const today = new Date();
 
-    const reservations = await Reservations.find();
+    const reservations = await Reservations.find().sort({startDate: 1}); 
 
     res.render('dashboard', {
       title: 'dashboard',
