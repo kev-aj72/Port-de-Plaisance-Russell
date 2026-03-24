@@ -17,11 +17,11 @@ const User = new Schema({
     password: {
         type    : String,
         trim    : true,
+        required: [true, 'Mot de passe requis']
     }
 },  {
     timestamps: true
 });
-
 
 //Hash le mot de passe quand il est modifié
 User.pre('save', async function() {

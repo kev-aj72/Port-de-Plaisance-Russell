@@ -5,7 +5,7 @@ const private = require('../middlewares/private');
 
 router.get('/', service.getAllUsers);
 router.get('/:email', private.checkJWT, service.getByEmail);
-router.post('/', service.add);
+router.post('/', private.checkJWT, service.add);
 router.put('/:email', private.checkJWT, service.update);
 router.delete('/:email', private.checkJWT, service.delete);
 
