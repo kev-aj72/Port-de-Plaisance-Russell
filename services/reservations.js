@@ -48,10 +48,10 @@ exports.add = async (req, res, next) => {
         });
 
         if (catway) {
-            return res.redirect('/catways/' + catway._id);
+            return res.redirect('/app/catways/' + catway._id);
         }
 
-        return res.redirect('/reservations');       
+        return res.redirect('/app/reservations');       
     } catch (error) {
         console.log(error);
         return res.status(501).json(error);
@@ -90,7 +90,7 @@ exports.update = async (req, res, next) => {
 
         return res.status(200).json({
             message: 'reservation_updated',
-            redirect: catway ? '/catways/' + catway._id : '/reservations'
+            redirect: catway ? '/app/catways/' + catway._id : '/app/reservations'
         });
     } catch (error) {
         console.error('Erreur update reservation :', error);
@@ -119,7 +119,7 @@ exports.delete = async (req, res, next) => {
 
         return res.status(200).json({
             message: 'reservation_deleted',
-            redirect: catway ? '/catways/' + catway._id : '/reservations'
+            redirect: catway ? '/app/catways/' + catway._id : '/app/reservations'
         });
     } catch (error) {
         console.error('Erreur delete reservation :', error);
