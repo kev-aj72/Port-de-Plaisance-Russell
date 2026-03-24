@@ -23,7 +23,6 @@ const User = new Schema({
     timestamps: true
 });
 
-
 //Hash le mot de passe quand il est modifié
 User.pre('save', async function() {
     if (!this.isModified('password') || !this.password) {
