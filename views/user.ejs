@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail utilisateur</title>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
+
+     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
+
+
 <body>
     <header>
         <nav>
@@ -13,111 +18,46 @@
                 <li><a href="/app/users">Utilisateur</a></li>
                 <li><a href="/app/catways">Catways</a></li>
                 <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/documentation">Documentation</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <h1>Détail utilisateur</h1>
+        <h2>Détail utilisateur</h2> <!-- detail de l'utilisateur les fonction modifier et supprimer fonctionne si c'est l'utitilisateur connecter qui modifie son compte-->
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Email</th>
-                    <th>Mot de passe</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <% if (userItem.email === connectedEmail) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Mot de passe</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><% if (userItem.email === connectedEmail) { %>
                             <input type="text" id="username-<%= userItem._id %>" value="<%= userItem.username %>">
-                        <% } else { %>
-                            <%= userItem.username %>
-                        <% } %>
-                    </td>
+                            <% } else { %> <%= userItem.username %> <% } %></td>
 
-                    <td><%= userItem.email %></td>
+                        <td><%= userItem.email %></td>
 
-                    <td>
-                        <% if (userItem.email === connectedEmail) { %>
+                        <td><% if (userItem.email === connectedEmail) { %>
                             <input type="password" id="password-<%= userItem._id %>" placeholder="Nouveau mot de passe">
-                        <% } else { %>
-                            -
-                        <% } %>
-                    </td>
-
-                    <td>
-                        <% if (userItem.email === connectedEmail) { %>
+                            <% } else { %>-<% } %> </td>
+                        
+                        <td><% if (userItem.email === connectedEmail) { %>
                             <button onclick="updateUser('<%= userItem.email %>', '<%= userItem._id %>')">Modifier</button>
                             <button onclick="deleteUser('<%= userItem.email %>')">Supprimer</button>
-                        <% } else { %>
-                            -
-                        <% } %>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <br>
+                            <% } else { %>-<% } %></td>
+                    </tr>
+                </tbody>
+            </table>
         <a href="/app/users">Retour</a>
     </main>
-
-    <script>
-    async function updateUser(email, id) {
-        const data = {
-            username: document.getElementById('username-' + id).value,
-            password: document.getElementById('password-' + id).value
-        };
-
-        try {
-            const res = await fetch('/users/' + encodeURIComponent(email), {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur modification');
-            }
-
-            alert('Utilisateur modifié');
-            window.location.reload();
-        } catch (error) {
-            console.error(error);
-            alert(error.message || 'Erreur modification');
-        }
-    }
-
-    async function deleteUser(email) {
-        const ok = confirm('Supprimer votre compte ?');
-        if (!ok) return;
-
-        try {
-            const res = await fetch('/users/' + encodeURIComponent(email), {
-                method: 'DELETE'
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur suppression');
-            }
-
-            alert('Compte supprimé');
-            window.location.href = result.redirect || '/';
-        } catch (error) {
-            console.error(error);
-            alert(error.message || 'Erreur suppression');
-        }
-    }
-    </script>
+    <script src="/javascripts/user.js"></script>
 </body>
 </html>

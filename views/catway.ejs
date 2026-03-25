@@ -4,223 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail du catway</title>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
+
+     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
+
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/app/users">Utilisateur</a></li>
-            <li><a href="/app/catways">Catways</a></li>
-            <li><a href="/app/reservations">Réservation</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </ul>
-    </nav>
-</header>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/app/users">Utilisateur</a></li>
+                <li><a href="/app/catways">Catways</a></li>
+                <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/documentation">Documentation</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<main>
-    <h1>Détail du catway</h1>
+    <main>
+    <section>
+        <h2>Détail du catway</h2>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>Numéro</th>
-            <th>Type</th>
-            <th>État</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <input type="text" id="catwayNumber" value="<%= catway.catwayNumber %>" readonly>
-            </td>
-            <td>
-                <input type="text" id="catwayType" value="<%= catway.catwayType %>">
-            </td>
-            <td>
-                <input type="text" id="catwayState" value="<%= catway.catwayState %>">
-            </td>
-            <td>
-                <button onclick="updateCatway('<%= catway.catwayNumber %>')">Enregistrer</button>
-                <button onclick="deleteCatway('<%= catway.catwayNumber %>')">Supprimer</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+            <!--tabeaux pour le catway-->
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Type</th>
+                <th>État</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-    <h2>Réservations du catway</h2>
+        <tbody>
+            <tr>
+                <td>
+                    <input type="text" id="catwayNumber" value="<%= catway.catwayNumber %>" readonly>
+                </td>
+                <td>
+                    <input type="text" id="catwayType" value="<%= catway.catwayType %>" readonly>
+                </td>
+                <td>
+                    <input type="text" id="catwayState" value="<%= catway.catwayState %>">
+                </td>
+                <td>
+                    <button onclick="updateCatway('<%= catway.catwayNumber %>')">Modifier</button>
+                    <button onclick="deleteCatway('<%= catway.catwayNumber %>')">Supprimer</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </section>
 
-    <% if (reservations && reservations.length > 0) { %>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Client</th>
-                    <th>Bateau</th>
-                    <th>Date début</th>
-                    <th>Date fin</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% reservations.forEach(reservation => { %>
+
+    <section>
+
+        <h3>Réservations en cours</h3>
+
+        <% if (reservations && reservations.length > 0) { %>
+            <table>
+                <thead> <!--tableaux reservation du catway-->
                     <tr>
-                        <td>
-                            <input
-                                type="text"
-                                id="clientName-<%= reservation._id %>"
-                                value="<%= reservation.clientName %>"
-                            >
-                        </td>
-                        <td>
-                            <input
-                                type="text"
-                                id="boatName-<%= reservation._id %>"
-                                value="<%= reservation.boatName %>"
-                            >
-                        </td>
-                        <td>
-                            <input
-                                type="date"
-                                id="startDate-<%= reservation._id %>"
-                                value="<%= reservation.startDate ? new Date(reservation.startDate).toISOString().split('T')[0] : '' %>"
-                            >
-                        </td>
-                        <td>
-                            <input
-                                type="date"
-                                id="endDate-<%= reservation._id %>"
-                                value="<%= reservation.endDate ? new Date(reservation.endDate).toISOString().split('T')[0] : '' %>"
-                            >
-                        </td>
-                        <td>
-                            <button onclick="updateReservation('<%= reservation._id %>')">
-                                Enregistrer
-                            </button>
-
-                            <button onclick="deleteReservation('<%= reservation._id %>')">
-                                Supprimer
-                            </button>
-                        </td>
+                        <th>Client</th>
+                        <th>Bateau</th>
+                        <th>Date début</th>
+                        <th>Date fin</th>
+                        <th>Action</th>
                     </tr>
-                <% }) %>
-            </tbody>
-        </table>
-    <% } else { %>
-        <p>Aucune réservation pour ce catway.</p>
-    <% } %>
+                </thead>
 
-    <h2>Ajouter une réservation</h2>
+                <tbody>
+                    <% reservations.forEach(reservation => { %>
+                        <tr>
+                            <td>
+                                <input type="text" id="clientName-<%= reservation._id %>" value="<%= reservation.clientName %>">
+                            </td>
+                            <td>
+                                <input type="text" id="boatName-<%= reservation._id %>" value="<%= reservation.boatName %>">
+                            </td>
+                            <td>
+                                <input type="date" id="startDate-<%= reservation._id %>" value="<%= reservation.startDate ? new Date(reservation.startDate).toISOString().split('T')[0] : '' %>">
+                            </td>
+                            <td>
+                                <input type="date" id="endDate-<%= reservation._id %>" value="<%= reservation.endDate ? new Date(reservation.endDate).toISOString().split('T')[0] : '' %>">
+                            </td>
+                            <td>
+                                <button onclick="updateReservation('<%= reservation._id %>', '<%= catway.catwayNumber %>')"> Modifier </button>
+                                <button onclick="deleteReservation('<%= reservation._id %>', '<%= catway.catwayNumber %>')"> Supprimer </button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+                    <% } else { %><p>Aucune réservation pour ce catway.</p><% } %>*
+            </table>
+    </section>
 
-    <form action="/catways/<%= catway.catwayNumber %>/reservations" method="POST">
+    <section>
+        <h3>Ajouter une réservation</h3> <!--formulaire ajouter une reservation a ce catway-->
 
-        <input type="text" name="clientName" placeholder="Nom du client" required>
-        <input type="text" name="boatName" placeholder="Nom du bateau" required>
-        <input type="date" name="startDate" required>
-        <input type="date" name="endDate" required>
+            <form action="/catways/<%= catway.catwayNumber %>/reservations" method="POST">
 
-        <button type="submit">Ajouter</button>
-    </form>
+                <input type="text" name="clientName" placeholder="Nom du client" required>
+                <input type="text" name="boatName" placeholder="Nom du bateau" required>
+                <input type="date" name="startDate" required>
+                <input type="date" name="endDate" required>
 
-    <br>
-    <a href="/app/catways">Retour</a>
-</main>
+                <button type="submit">Ajouter</button>
+            </form>
 
-<script>
-    async function updateReservation(id) {
-        const data = {
-            clientName: document.getElementById('clientName-' + id).value,
-            boatName: document.getElementById('boatName-' + id).value,
-            startDate: document.getElementById('startDate-' + id).value,
-            endDate: document.getElementById('endDate-' + id).value
-        };
-
-        try {
-            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur modification');
-            }
-
-            alert('Réservation modifiée');
-            window.location.reload();
-        } catch (error) {
-            console.error('Erreur modification :', error);
-            alert('Erreur modification');
-        }
-    }
-
-    async function deleteReservation(id) {
-        if (!confirm('Supprimer ?')) return;
-
-        try {
-            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
-                method: 'DELETE'
-            });
-
-            const result = await res.json();
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur suppression');
-            }
-
-            alert('Réservation supprimée');
-            window.location.reload();
-        } catch (error) {
-            console.error('Erreur suppression :', error);
-            alert('Erreur suppression');
-        }
-    }
-</script>
-
-<script>
-    async function updateCatway(id) {
-    const data = {
-        catwayNumber: document.getElementById('catwayNumber').value,
-        catwayType: document.getElementById('catwayType').value,
-        catwayState: document.getElementById('catwayState').value
-    };
-
-    try {
-        const res = await fetch('/catways/' + id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (!res.ok) throw new Error();
-
-        alert('Catway modifié');
-        window.location.reload();
-    } catch (error) {
-        console.error(error);
-        alert('Erreur modification catway');
-    }
-}
-
-async function deleteCatway(id) {
-    const ok = confirm('Supprimer ce catway ?');
-    if (!ok) return;
-
-    try {
-        const res = await fetch('/catways/' + id, {
-            method: 'DELETE'
-        });
-
-        if (!res.ok) throw new Error();
-
-        window.location.href = '/app/catways';
-    } catch (error) {
-        console.error(error);
-        alert('Erreur suppression catway');
-    }
-}
-</script>
+            <a href="/app/catways">Retour</a>
+    </section>
+    </main> 
+        <script src="/javascripts/catway.js"></script>
+</body>
+</html>

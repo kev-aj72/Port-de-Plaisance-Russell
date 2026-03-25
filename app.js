@@ -26,7 +26,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.post('/login', usersService.authenticate);
 
 app.use('/users', userRoute);
@@ -34,7 +34,7 @@ app.use('/catways', catwayRoute);
 app.use('/', reservationRoute);
 
 app.use('/', indexRouter);
-app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(function(req, res, next) {
     res.status(404).json({name: 'API', version: '1.0', status: 404, message: 'not_found'});
 });

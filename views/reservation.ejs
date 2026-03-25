@@ -4,130 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail de la réservation</title>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
+
+     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/dashboard">Dashboard</a></li>
-                <li><a href="/app/users">Utilisateur</a></li>
-                <li><a href="/app/catways">Catways</a></li>
-                <li><a href="/app/reservations">Réservation</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
+
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/app/users">Utilisateur</a></li>
+                    <li><a href="/app/catways">Catways</a></li>
+                    <li><a href="/app/reservations">Réservation</a></li>
+                    <li><a href="/documentation">Documentation</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
 
     <main>
-        <h1>Détail de la réservation</h1>
+        <h2>Détail de la réservation</h2> <!--tableau details reservation-->
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Client</th>
-                    <th>Bateau</th>
-                    <th>Date début</th>
-                    <th>Date fin</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Bateau</th>
+                        <th>Date début</th>
+                        <th>Date fin</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="text" id="clientName-<%= reservation._id %>" value="<%= reservation.clientName %>">
-                    </td>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" id="clientName-<%= reservation._id %>" value="<%= reservation.clientName %>">
+                        </td>
+                        <td>
+                            <input type="text" id="boatName-<%= reservation._id %>" value="<%= reservation.boatName %>">
+                        </td>
+                        <td>
+                            <input type="date" id="startDate-<%= reservation._id %>" value="<%= reservation.startDate ? new Date(reservation.startDate).toISOString().split('T')[0] : '' %>">
+                        </td>
+                        <td>
+                            <input type="date" id="endDate-<%= reservation._id %>" value="<%= reservation.endDate ? new Date(reservation.endDate).toISOString().split('T')[0] : '' %>">
+                        </td>
+                        <td>
+                            <button onclick="updateReservation('<%= reservation._id %>', '<%= reservation.catwayNumber %>')">Modifier</button>
 
-                    <td>
-                        <input type="text" id="boatName-<%= reservation._id %>" value="<%= reservation.boatName %>">
-                    </td>
-
-                    <td>
-                        <input
-                            type="date"
-                            id="startDate-<%= reservation._id %>"
-                            value="<%= reservation.startDate ? new Date(reservation.startDate).toISOString().split('T')[0] : '' %>"
-                        >
-                    </td>
-
-                    <td>
-                        <input
-                            type="date"
-                            id="endDate-<%= reservation._id %>"
-                            value="<%= reservation.endDate ? new Date(reservation.endDate).toISOString().split('T')[0] : '' %>"
-                        >
-                    </td>
-
-                    <td>
-                        <button onclick="updateReservation('<%= reservation._id %>')">
-                            Enregistrer
-                        </button>
-
-                        <button onclick="deleteReservation('<%= reservation._id %>')">
-                            Supprimer
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <br>
+                            <button onclick="deleteReservation('<%= reservation._id %>', '<%= reservation.catwayNumber %>')">Supprimer</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         <a href="/app/reservations">Retour</a>
     </main>
-
-<script>
-    async function updateReservation(id) {
-        const data = {
-            clientName: document.getElementById('clientName-' + id).value,
-            boatName: document.getElementById('boatName-' + id).value,
-            startDate: document.getElementById('startDate-' + id).value,
-            endDate: document.getElementById('endDate-' + id).value
-        };
-
-        try {
-            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await res.json();
-            console.log('Réponse update :', result);
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur modification');
-            }
-
-            alert('Réservation modifiée');
-            window.location.reload();
-        } catch (error) {
-            console.error('Erreur modification :', error);
-            alert('Erreur modification');
-        }
-    }
-
-    async function deleteReservation(id) {
-        if (!confirm('Supprimer ?')) return;
-
-        try {
-            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
-                method: 'DELETE'
-            });
-
-            const result = await res.json();
-            console.log('Réponse delete :', result);
-
-            if (!res.ok) {
-                throw new Error(result.message || 'Erreur suppression');
-            }
-
-            alert('Réservation supprimée');
-            window.location.href = '/app/reservations';
-        } catch (error) {
-            console.error('Erreur suppression :', error);
-            alert('Erreur suppression');
-        }
-    }
-</script>
+    <script src="/javascripts/catway.js"></script>
 </body>
 </html>

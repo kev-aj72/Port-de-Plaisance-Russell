@@ -4,65 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer une API pour le Port de Plaisance Russell</title>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
+
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
-    <header>
+
+  <body>
+      <header>
+        
         <nav>
             <ul>
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/app/users">Utilisateur</a></li>
                 <li><a href="/app/catways">Catways</a></li>
                 <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/documentation">Documentation</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
-    </header>
+      </header>
 
-    <main>
-       <h2>Catways</h2>
+    <main> 
+      
+      <section>
+        
+        <h2>Catways</h2>
+           <!--formulaire ajouter un catway-->
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Voir le catway </th>
-      <th>Numéro du catway</th>
-      <th>Type de catway</th>
-      <th>État du catway</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% catways.forEach(catway => { %>
-      <tr>
-        <td><a href="/app/catways/<%= catway._id %>">Voir</a></td>
-        <td><%= catway.catwayNumber %></td>
-        <td><%= catway.catwayType %></td>
-        <td><%= catway.catwayState %></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+            <form action="/catways" method="POST">
+              <div>
+                <label for="catwayNumber">Numéro du catway</label>
+                <input type="text" id="catwayNumber" name="catwayNumber" required>
+              </div>
 
-<form action="/catways" method="POST">
-    <div>
-        <label for="catwayNumber">Numéro du catway</label>
-        <input type="text" id="catwayNumber" name="catwayNumber" required>
-    </div>
+              <div>
+                <label for="catwayType">Type</label>
+                <select name="catwayType" id="catwayType" required>
+                  <option value="long">long</option>
+                  <option value="short">short</option>
+                </select>
+              </div>
 
-    <div>
-        <label for="catwayType">Type de catway</label>
-        <input type="text" id="catwayType" name="catwayType" required>
-    </div>
+              <div>
+                <label for="catwayState">État du catway</label>
+                <input type="text" id="catwayState" name="catwayState" required>
+              </div>
 
-    <div>
-        <label for="catwayState">État du catway</label>
-        <input type="text" id="catwayState" name="catwayState" required>
-    </div>
+                <button type="submit">Ajouter</button>
+            </form>
+    </section>
 
-    <button type="submit">Ajouter</button>
-</form>
+    <section>
+        <table> <!--tableau liste catways-->
+          <thead>
+            <tr>
+              <th>Voir le catway </th>
+              <th>Numéro du catway</th>
+              <th>Type de catway</th>
+              <th>État du catway</th>
+              </tr>
+          </thead>
+          
+          <tbody>
+            <% catways.forEach(catway => { %>
+            <tr>
+              <td><a href="/app/catways/<%= catway._id %>">Voir</a></td>
+              <td><%= catway.catwayNumber %></td>
+              <td><%= catway.catwayType %></td>
+              <td><%= catway.catwayState %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+    </section>
 
-<br>
+   
     </main>
     
-</body>
+  </body>
 </html>

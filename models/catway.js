@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
+//model Catway
+
 const Catway = new Schema({
     catwayNumber: {
         type    : Number,
         trim    : true,
         required: [true, 'numero requis'],
+        unique  : true,
         min: [1, 'Le numéro de catway doit être supérieur à 0'],
     },
     catwayType: {
@@ -20,7 +23,7 @@ const Catway = new Schema({
         required: [true, 'Nom requis'],
     }
 
-},  {
+    },  {
     timestamps: true
 });
 

@@ -3,6 +3,8 @@ const router = express.Router();
 const service = require('../services/users');
 const private = require('../middlewares/private');
 
+//route users API
+
 router.get('/', service.getAllUsers);
 router.get('/:email', private.checkJWT, service.getByEmail);
 router.post('/', private.checkJWT, service.add);

@@ -1,5 +1,7 @@
 const mongoose = require ('mongoose');
 
+//Initialisation connexion Mongodb
+
 const clientOptions = {
     dbName            : 'dbPortDePlaisanceRussell',
 };

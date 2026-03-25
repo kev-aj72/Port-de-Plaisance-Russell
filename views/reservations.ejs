@@ -4,48 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer une API pour le Port de Plaisance Russell</title>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
+
+     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
+
+    <body>
+      <header>
+          <nav>
+              <ul>
                 <li><a href="/dashboard">Dashboard</a></li>
                 <li><a href="/app/users">Utilisateur</a></li>
                 <li><a href="/app/catways">Catways</a></li>
                 <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/documentation">Documentation</a></li>
                 <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
+              </ul>
+          </nav>
+      </header>
 
-    <main>
-       <h2>Réservations</h2>
+      <main>
+        <h2>Réservations</h2> <!--tableau de toute les reservation-->
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Voir</th>
-      <th>Catway</th>
-      <th>Client</th>
-      <th>Bateau</th>
-      <th>Date début</th>
-      <th>Date fin</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% reservations.forEach(reservation => { %>
-      <tr>
-        <td><a href="/app/reservations/<%= reservation._id %>">Voir</a></td>
-        <td><%= reservation.catwayNumber %></td>
-        <td><%= reservation.clientName %></td>
-        <td><%= reservation.boatName %></td>
-        <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
-        <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
-    </main>
+        <table>
+          <thead>
+            <tr>
+              <th>Voir</th>
+              <th>Catway</th>
+              <th>Client</th>
+              <th>Bateau</th>
+              <th>Date début</th>
+              <th>Date fin</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% reservations.forEach(reservation => { %>
+            <tr>
+              <td><a href="/app/reservations/<%= reservation._id %>">Voir</a></td>
+              <td><%= reservation.catwayNumber %></td>
+              <td><%= reservation.clientName %></td>
+              <td><%= reservation.boatName %></td>
+              <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+              <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </main>
     
-</body>
+    </body>
 </html>
