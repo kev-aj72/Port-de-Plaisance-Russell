@@ -10,10 +10,16 @@ const catwayRoute = require('./routes/catways');
 const reservationRoute = require('./routes/reservations');
 const mongodb     = require('./db/mongo');
 
+/**
+ * connexion à la base de données MongoDB
+ */
+
 mongodb.initClientDbConnection();
 
 const app = express();
-
+/**
+ * Config CORS
+ */
 app.use(cors({
   exposedHeaders: ['Authorization'],
   origin: '*'
@@ -27,12 +33,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * Authentification utilisateur.
+ * @route POST /login
+ */
 app.post('/login', usersService.authenticate);
-
+/**
+ * Routes API utilisateurs.
+ * @route /users
+ */
 app.use('/users', userRoute);
+/**
+ * Routes API catways.
+ * @route /catways
+ */
 app.use('/catways', catwayRoute);
+/**
+ * Routes API réservations.
+ * @route /
+ */
 app.use('/', reservationRoute);
-
+/**
+ * Routes frontend (pages EJS).
+ * @route /
+ */
 app.use('/', indexRouter);
 
 app.use(function(req, res, next) {

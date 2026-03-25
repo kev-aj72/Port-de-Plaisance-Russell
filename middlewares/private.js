@@ -2,7 +2,12 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
 
-//code protection des routes
+/**
+ * Middleware de vérification du token JWT
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 
 exports.checkJWT = (req, res, next) => {
     const token = req.cookies.token;

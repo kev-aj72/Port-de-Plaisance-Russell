@@ -2,7 +2,13 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 const bcrypt   = require('bcrypt');
 
-//model user
+/**
+ * Schéma représentant un utilisateur
+ * @typedef {Object} User
+ * @property {string} username - Nom de l'utilisateur
+ * @property {string} email - Email unique de l'utilisateur
+ * @property {string} password - Mot de passe 
+ */
 
 const User = new Schema({
     username: {
@@ -27,7 +33,10 @@ const User = new Schema({
     timestamps: true
 });
 
-//Hash le mot de passe quand il est modifié
+/**
+ * Middleware pour hasher le mot de passe
+ * @function
+ */
 
 User.pre('save', async function() {
     if (!this.isModified('password') || !this.password) {

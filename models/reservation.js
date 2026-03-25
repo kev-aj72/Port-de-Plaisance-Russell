@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
-//model réservation
+/**
+ * Schéma réservation
+ * @typedef {Object} Reservation
+ * @property {number} catwayNumber
+ * @property {string} clientName
+ * @property {string} boatName
+ * @property {Date} startDate
+ * @property {Date} endDate
+ */
 
 const Reservation = new Schema({
     catwayNumber: {

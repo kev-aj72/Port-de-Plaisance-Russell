@@ -1,4 +1,8 @@
- // script pour modifier un utillisateur
+ /**
+ * Modifie un utilisateur
+ * @param {string} email
+ * @param {string|number} id
+ */
  
  async function updateUser(email, id) {
         const data = {
@@ -29,7 +33,10 @@
         }
     }
 
-    //script pour effacer un utillisateur 
+    /**
+   * Supprime un utilisateur
+    * @param {string} email
+    */ 
 
     async function deleteUser(email) {
         const ok = confirm('Supprimer votre compte ?');

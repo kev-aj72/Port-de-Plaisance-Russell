@@ -3,7 +3,12 @@ const bcrypt = require('bcrypt');
 const jwt    = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY
 
-//fonction recuperer tous les utilisateur
+/**
+ * Récupère tous les utilisateurs sans leur mot de passe.
+ * @route GET /users
+ * @param {Object} req - Requête Express
+ * @param {Object} res - Réponse Express
+ */
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -14,7 +19,14 @@ exports.getAllUsers = async (req, res) => {
     }
 };
 
-//fonction recuperer un utilisateur
+/**
+ * Récupère un utilisateur par son email.
+ * @route GET /users/:email
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.email - Email de l'utilisateur
+ * @param {Object} res - Réponse Express
+ */
 
 exports.getByEmail = async (req, res) => {
     const email = req.params.email
@@ -32,7 +44,16 @@ exports.getByEmail = async (req, res) => {
     }
 }
 
-//fonction créer  un utilisateur
+/**
+ * Crée un nouvel utilisateur.
+ * @route POST /users
+ * @param {Object} req - Requête Express
+ * @param {Object} req.body - Corps de la requête
+ * @param {string} req.body.username - Nom de l'utilisateur
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.password - Mot de passe de l'utilisateur
+ * @param {Object} res - Réponse Express
+ */
 
 exports.add = async (req, res) => {
 
@@ -54,7 +75,17 @@ exports.add = async (req, res) => {
     }
 }
 
-//fonction modifier un utilisateur
+/**
+ * Modifie un utilisateur.
+ * @route PUT /users/:email
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.email - Email de l'utilisateur à modifier
+ * @param {Object} req.body - Corps de la requête
+ * @param {string} [req.body.username] - Nouveau nom d'utilisateur
+ * @param {string} [req.body.password] - Nouveau mot de passe
+ * @param {Object} res - Réponse Express
+ */
 
 exports.update = async (req, res) => {
     const email = req.params.email;
@@ -102,7 +133,14 @@ exports.update = async (req, res) => {
     }
 };
 
-//fonction supprimer un utilisateur
+/**
+ * Supprime un utilisateur.
+ * @route DELETE /users/:email
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.email - Email de l'utilisateur à supprimer
+ * @param {Object} res - Réponse Express
+ */
 
 exports.delete = async (req, res) => {
     const email = req.params.email;
@@ -128,7 +166,15 @@ exports.delete = async (req, res) => {
     }
 };
 
-//fonction auticate pour authentifier l'utilisateur a la connexion
+/**
+ * Authentifie un utilisateur.
+ * @route POST /users/authenticate
+ * @param {Object} req - Requête Express
+ * @param {Object} req.body - Corps de la requête
+ * @param {string} req.body.email - Email de l'utilisateur
+ * @param {string} req.body.password - Mot de passe de l'utilisateur
+ * @param {Object} res - Réponse Express
+ */
 
 exports.authenticate = async (req, res) => {
     const { email, password } = req.body;
