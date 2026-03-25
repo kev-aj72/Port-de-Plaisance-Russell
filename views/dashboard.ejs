@@ -13,6 +13,7 @@
                 <li><a href="/app/users">Utilisateur</a></li>
                 <li><a href="/app/catways">Catways</a></li>
                 <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -45,8 +46,8 @@
         <td><%= reservation.catwayNumber %></td>
         <td><%= reservation.clientName %></td>
         <td><%= reservation.boatName %></td>
-        <td><%= reservation.startDate.toLocaleDateString('fr-FR') %></td>
-        <td><%= reservation.endDate.toLocaleDateString('fr-FR') %></td>
+        <td><%= reservation.startDate ? new Date(reservation.startDate).toLocaleDateString('fr-FR') : '' %></td>
+<td><%= reservation.endDate ? new Date(reservation.endDate).toLocaleDateString('fr-FR') : '' %></td>
       </tr>
     <% }) %>
   </tbody>

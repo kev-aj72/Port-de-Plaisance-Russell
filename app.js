@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -29,9 +28,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.post('/login', usersService.authenticate);
+
 app.use('/users', userRoute);
 app.use('/catways', catwayRoute);
-app.use('/reservations', reservationRoute);
+app.use('/', reservationRoute);
 
 app.use('/', indexRouter);
 app.use(express.static(path.join(__dirname, 'public')));

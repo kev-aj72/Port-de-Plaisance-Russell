@@ -126,33 +126,42 @@ exports.authenticate = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email: email }, '-__v -createdAt -updatedAt');
+        const user = await User.findOne(
+            { email: email },
+            '-__v -createdAt -updatedAt'
+        );
 
-        if (user) {
-            bcrypt.compare(password, user.password, function(err, response) {
-                if (err){
-                    throw new Error(err);
-                }
-            if (response) {
-                delete user._doc.password;
+        if (!user) {
+            return res.render('index', {
+                title: 'Accueil',
+                error: 'Utilisateur non trouvé'
+            });
+        }
 
-                const expireIn = 24 * 60 * 60;
-                const token    = jwt.sign(
-                    {user: user},
-                    SECRET_KEY,
-                    {expiresIn: expireIn}
-                );
+        const valid = await bcrypt.compare(password, user.password);
+
+        if (!valid) {
+            return res.render('index', {
+                title: 'Accueil',
+                error: 'Email ou mot de passe incorrect'
+            });
+        }
+
+        const userObj = user.toObject();
+        delete userObj.password;
+
+        const expireIn = 24 * 60 * 60;
+        const token = jwt.sign(
+            { user: userObj },
+            SECRET_KEY,
+            { expiresIn: expireIn }
+        );
 
         res.cookie('token', token, { httpOnly: true });
+
         return res.redirect('/dashboard');
-            }
-        
-            return res.render('index', { title: 'Accueil', error: 'Email ou mot de passe incorrect' });
-        });
-    } else {
-            return res.render('index', { title: 'Accueil', error: 'Utilisateur non trouvé' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
     }
-} catch (error) {
-    return res.status(501).json(error);
-}
 };

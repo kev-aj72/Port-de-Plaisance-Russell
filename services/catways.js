@@ -1,20 +1,20 @@
 const Catways = require('../models/catway');
-const Reservation= require('../models/reservation');
+const Reservation = require('../models/reservation');
 
-exports.getAllCatway = async (req, res) => {
+exports.getAllCatways = async (req, res) => {
     try {
         const catways = await Catways.find();
-        res.status(200).json(catways);
+        return res.status(200).json(catways);
     } catch (error) {
-        res.status(501).json(error);
+        return res.status(500).json(error);
     }
 };
 
-exports.getById = async (req, res, next) => {
-    const id = req.params.id
+exports.getById = async (req, res) => {
+    const id = Number (req.params.id);
 
     try {
-        let catway = await Catways.findById(id);
+        const catway = await Catways.findOne({ catwayNumber: id });
 
         if (catway) {
             return res.status(200).json(catway);
@@ -22,31 +22,11 @@ exports.getById = async (req, res, next) => {
 
         return res.status(404).json('catway_not_found');
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
-}
+};
 
-exports.add = async (req, res, next) => {
-
-    const temp = ({
-        catwayNumber   : req.body.catwayNumber,
-        catwayType     : req.body.catwayType,
-        catwayState    : req.body.catwayState
-    });
-
-    try {
-        await Catways.create(temp);
-
-        return res.redirect('/app/catways');
-    } catch (error) {
-        console.log(error);
-        return res.status(501).json(error);
-    }
-}
-
-
-exports.update = async (req, res, next) => {
-    const Id = req.params.id;
+exports.add = async (req, res) => {
     const temp = {
         catwayNumber: req.body.catwayNumber,
         catwayType: req.body.catwayType,
@@ -54,14 +34,32 @@ exports.update = async (req, res, next) => {
     };
 
     try {
-        let catway = await Catways.findOne({ _id: Id });
-        
+        await Catways.create(temp);
+        return res.redirect('/app/catways');
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }
+};
+
+exports.update = async (req, res) => {
+    const id = Number (req.params.id);
+
+    const temp = {
+        catwayNumber: req.body.catwayNumber,
+        catwayType: req.body.catwayType,
+        catwayState: req.body.catwayState
+    };
+
+    try {
+        const catway = await Catways.findOne({ catwayNumber: id });
+
         if (!catway) {
             return res.status(404).json({ message: 'catway_not_found' });
         }
 
         Object.keys(temp).forEach((key) => {
-            if (temp[key]) {
+            if (temp[key] !== undefined && temp[key] !== null && temp[key] !== '') {
                 catway[key] = temp[key];
             }
         });
@@ -75,21 +73,21 @@ exports.update = async (req, res, next) => {
     }
 };
 
+exports.delete = async (req, res) => {
+    const id = Number (req.params.id);
 
-exports.delete = async (req, res, next) => {
-    const Id = req.params.id;
-    
     try {
-        const catway = await Catways.findOne({ _id: Id });
+        const catway = await Catways.findOne({ catwayNumber: id });
 
         if (!catway) {
             return res.status(404).json({ message: 'catway_not_found' });
         }
-          await Reservation.deleteMany({
+
+        await Reservation.deleteMany({
             catwayNumber: catway.catwayNumber
         });
 
-        await Catways.deleteOne({ _id: Id });
+        await Catways.deleteOne({ catwayNumber: id });
 
         return res.status(200).json({ message: 'delete_ok' });
     } catch (error) {
