@@ -6,6 +6,7 @@
     <title>Détail du catway</title>
     <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
 
+     <link rel="icon" type="image.png" href="images/favicon.png">
      <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
@@ -97,7 +98,7 @@
                         </tr>
                     <% }) %>
                 </tbody>
-                    <% } else { %><p>Aucune réservation pour ce catway.</p><% } %>*
+                    <% } else { %><p>Aucune réservation pour ce catway.</p><% } %>
             </table>
     </section>
 
@@ -114,9 +115,12 @@
                 <button type="submit">Ajouter</button>
             </form>
 
-            <a href="/app/catways">Retour</a>
+            <a class="back" href="/app/catways">Retour</a>
     </section>
     </main> 
+    <footer>
+        <small>© 2026 - Application Port de Plaisance</small>
+    </footer>
         <script src="/javascripts/catway.js"></script>
 </body>
 </html>

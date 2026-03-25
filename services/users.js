@@ -43,6 +43,9 @@ exports.add = async (req, res) => {
     });
 
     try {
+        if (!req.body.password || req.body.password.length < 6) {
+            return res.send('6 caractères minimum');
+        }
         await User.create(temp);
 
         return res.redirect('/app/users');

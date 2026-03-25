@@ -6,6 +6,7 @@
     <title>Créer une API pour le Port de Plaisance Russell</title>
     <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
 
+     <link rel="icon" type="image.png" href="images/favicon.png">
      <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
@@ -17,7 +18,7 @@
                 <h1> API pour le Port de Plaisance Russell</h1>
 
 
-                <p>Cette application permet de gérer les catways et les réservations du port.
+                <p id="presentation">Cette application permet de gérer les catways et les réservations du port.
                     Elle permet de consulter, ajouter, modifier et supprimer des catways ainsi
                     que leurs réservations.</p>
             </section>
@@ -33,12 +34,15 @@
                         <button type="submit">Se connecter</button>
        
                     </form>
-                        <a href="/documentation">
-                        <button type="button">Voir La Documentation</button>
-                        </a>
+                        <div id="documentation">
+                            <a id="documentationbtn" href="/documentation">Voir la documentation</a>
+                        </div>
         </section>
         
         </main>
-        <script src="/javascripts/users.js"></script>
+        <footer>
+            <small>© 2026 - Application Port de Plaisance</small>
+        </footer>
+        <script src="/javascripts/user.js"></script>
     </body>
 </html>
