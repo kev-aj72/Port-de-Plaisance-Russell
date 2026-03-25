@@ -3,15 +3,18 @@ const bcrypt = require('bcrypt');
 const jwt    = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY
 
+//fonction recuperer tous les utilisateur
 
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password');
         res.status(200).json(users);
     } catch (error) {
-        res.status(501).json(error);
+        res.status(500).json({ message: 'erreur serveur' });
     }
 };
+
+//fonction recuperer un utilisateur
 
 exports.getByEmail = async (req, res) => {
     const email = req.params.email
@@ -25,10 +28,11 @@ exports.getByEmail = async (req, res) => {
 
         return res.status(404).json('user_not_found');
     } catch (error) {
-        console.log(error);
-        return res.status(501).json(error);
+        return res.status(500).json({ message: 'erreur serveur' });
     }
 }
+
+//fonction créer  un utilisateur
 
 exports.add = async (req, res) => {
 
@@ -37,16 +41,17 @@ exports.add = async (req, res) => {
         email      : req.body.email,
         password   : req.body.password
     });
-console.log("Tentative d'ajout d'utilisateur:", temp);
+
     try {
-        let user = await User.create(temp);
- console.log("Utilisateur ajouté avec succès:", user);
+        await User.create(temp);
+
         return res.redirect('/app/users');
     } catch (error) {
-         console.error("Erreur lors de l'ajout de l'utilisateur:", error);
-        return res.render('index', { title: 'Accueil', error: 'Impossible de créer l utilisateur' });
+         return res.status(500).json({ message: 'erreur serveur' });
     }
 }
+
+//fonction modifier un utilisateur
 
 exports.update = async (req, res) => {
     const email = req.params.email;
@@ -59,7 +64,7 @@ exports.update = async (req, res) => {
         let user = await User.findOne({ email: email });
         
         if (!user) {
-            return res.status(404).json({ message: 'user_not_found' });
+            return res.status(404).json({ message: 'user non trouvé' });
         }
 
         if (req.body.username && req.body.username.trim() !== '') {
@@ -87,40 +92,40 @@ exports.update = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true });
 
-        return res.status(200).json({ message: 'user_updated' });
+        return res.status(200).json({ message: 'user updated' });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ message: 'server_error' });
+        return res.status(500).json({ message: 'erreur serveur' });
     }
 };
+
+//fonction supprimer un utilisateur
 
 exports.delete = async (req, res) => {
     const email = req.params.email;
 
     if (email !== req.user.email) {
-        return res.status(403).json({ message: 'forbidden' });
+        return res.status(403).json({ message: 'erreur' });
     }
     
     try {
         const user = await User.findOne({ email: email });
 
         if (!user) {
-            return res.status(404).json({ message: 'user_not_found' });
+            return res.status(404).json({ message: 'user non trouvé' });
         }
 
         await User.deleteOne({ email: email });
 
         res.clearCookie('token', { path: '/' });
 
-        return res.status(200).json({
-            message: 'delete_ok',
-            redirect: '/'
-        });
+        return res.status(200).json({ message: 'delete_ok', redirect: '/' });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: 'server_error' });
+        return res.status(500).json({ message: 'erreur serveur' });
     }
 };
+
+//fonction auticate pour authentifier l'utilisateur a la connexion
 
 exports.authenticate = async (req, res) => {
     const { email, password } = req.body;
@@ -132,19 +137,13 @@ exports.authenticate = async (req, res) => {
         );
 
         if (!user) {
-            return res.render('index', {
-                title: 'Accueil',
-                error: 'Utilisateur non trouvé'
-            });
+            return res.render('index', { title: 'Accueil', error: 'Utilisateur non trouvé' });
         }
 
         const valid = await bcrypt.compare(password, user.password);
 
         if (!valid) {
-            return res.render('index', {
-                title: 'Accueil',
-                error: 'Email ou mot de passe incorrect'
-            });
+            return res.render('index', { title: 'Accueil', error: 'Email ou mot de passe incorrect' });
         }
 
         const userObj = user.toObject();
@@ -162,6 +161,6 @@ exports.authenticate = async (req, res) => {
         return res.redirect('/dashboard');
     } catch (error) {
         console.log(error);
-        return res.status(500).json(error);
+        return res.status(500).json({ message: 'erreur serveur' });
     }
 };

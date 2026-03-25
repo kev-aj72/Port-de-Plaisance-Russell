@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.SECRET_KEY;
 
+
+//code protection des routes
+
 exports.checkJWT = (req, res, next) => {
     const token = req.cookies.token;
 

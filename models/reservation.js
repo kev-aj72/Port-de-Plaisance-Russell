@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
+//model réservation
 
 const Reservation = new Schema({
     catwayNumber: {
@@ -27,7 +28,7 @@ const Reservation = new Schema({
         type    : Date,
         required: [true, 'Date requis'],
     }
-},  {
+    },  {
     timestamps: true
 });
 

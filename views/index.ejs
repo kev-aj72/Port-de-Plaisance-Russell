@@ -4,28 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer une API pour le Port de Plaisance Russell</title>
-</head>
-<body>
+    <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
 
-    <main>
-        <h1> API pour le Port de Plaisance Russell</h1>
-        <section id="LoginSection">
-         <div>   
-            <h2>Connexion</h2>
-            <% if (error) { %>
-            <p><%= error %></p>
-            <% } %>
-        <form id="loginForm" action="/login" method="POST">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Mot de passe" required>
+     <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+
+    <body>
+
+        <main>
+            <section>
+                <h1> API pour le Port de Plaisance Russell</h1>
+
+
+                <p>Cette application permet de gérer les catways et les réservations du port.
+                    Elle permet de consulter, ajouter, modifier et supprimer des catways ainsi
+                    que leurs réservations.</p>
+            </section>
+
+
+        <section id="LoginSection">  <!--formulaire de connexion--> 
+                <h2>Connexion</h2>
+                    <% if (error) { %><p><%= error %></p><% } %>
+                    <form id="loginForm" action="/login" method="POST">
+                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="password" name="password" placeholder="Mot de passe" required>
         
-        <button type="submit">Se connecter</button>
+                        <button type="submit">Se connecter</button>
        
-        </form>
-    </div> 
+                    </form>
+                        <a href="/documentation">
+                        <button type="button">Voir La Documentation</button>
+                        </a>
         </section>
+        
+        </main>
         <script src="/javascripts/users.js"></script>
-    </main>
-    
-</body>
+    </body>
 </html>
