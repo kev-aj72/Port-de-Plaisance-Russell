@@ -13,6 +13,7 @@
             <li><a href="/app/users">Utilisateur</a></li>
             <li><a href="/app/catways">Catways</a></li>
             <li><a href="/app/reservations">Réservation</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
 </header>
@@ -41,8 +42,8 @@
                 <input type="text" id="catwayState" value="<%= catway.catwayState %>">
             </td>
             <td>
-                <button onclick="updateCatway('<%= catway._id %>')">Enregistrer</button>
-                <button onclick="deleteCatway('<%= catway._id %>')">Supprimer</button>
+                <button onclick="updateCatway('<%= catway.catwayNumber %>')">Enregistrer</button>
+                <button onclick="deleteCatway('<%= catway.catwayNumber %>')">Supprimer</button>
             </td>
         </tr>
     </tbody>
@@ -111,8 +112,7 @@
 
     <h2>Ajouter une réservation</h2>
 
-    <form action="/reservations" method="POST">
-        <input type="hidden" name="catwayNumber" value="<%= catway.catwayNumber %>">
+    <form action="/catways/<%= catway.catwayNumber %>/reservations" method="POST">
 
         <input type="text" name="clientName" placeholder="Nom du client" required>
         <input type="text" name="boatName" placeholder="Nom du bateau" required>
@@ -136,18 +136,19 @@
         };
 
         try {
-            const res = await fetch('/reservations/' + id, {
+            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
-            const result = await res.text();
-            console.log('Réponse update :', result);
+            const result = await res.json();
 
-            if (!res.ok) throw new Error(result);
+            if (!res.ok) {
+                throw new Error(result.message || 'Erreur modification');
+            }
 
-            alert('Modifié');
+            alert('Réservation modifiée');
             window.location.reload();
         } catch (error) {
             console.error('Erreur modification :', error);
@@ -159,16 +160,17 @@
         if (!confirm('Supprimer ?')) return;
 
         try {
-            const res = await fetch('/reservations/' + id , {
+            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
                 method: 'DELETE'
             });
 
-            const result = await res.text();
-            console.log('Réponse delete :', result);
+            const result = await res.json();
 
-            if (!res.ok) throw new Error(result);
+            if (!res.ok) {
+                throw new Error(result.message || 'Erreur suppression');
+            }
 
-            alert('Supprimé');
+            alert('Réservation supprimée');
             window.location.reload();
         } catch (error) {
             console.error('Erreur suppression :', error);
@@ -179,48 +181,46 @@
 
 <script>
     async function updateCatway(id) {
-        const data = {
-            catwayNumber: document.getElementById('catwayNumber').value,
-            catwayType: document.getElementById('catwayType').value,
-            catwayState: document.getElementById('catwayState').value
-        };
+    const data = {
+        catwayNumber: document.getElementById('catwayNumber').value,
+        catwayType: document.getElementById('catwayType').value,
+        catwayState: document.getElementById('catwayState').value
+    };
 
-        try {
-            const res = await fetch('/catways/' + id, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+    try {
+        const res = await fetch('/catways/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
-            if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
 
-            alert('Catway modifié');
-            window.location.reload();
-        } catch (error) {
-            console.error(error);
-            alert('Erreur modification catway');
-        }
+        alert('Catway modifié');
+        window.location.reload();
+    } catch (error) {
+        console.error(error);
+        alert('Erreur modification catway');
     }
+}
 
-    async function deleteCatway(id) {
-        const ok = confirm('Supprimer ce catway ?');
-        if (!ok) return;
+async function deleteCatway(id) {
+    const ok = confirm('Supprimer ce catway ?');
+    if (!ok) return;
 
-        try {
-            const res = await fetch('/catways/' + id, {
-                method: 'DELETE'
-            });
+    try {
+        const res = await fetch('/catways/' + id, {
+            method: 'DELETE'
+        });
 
-            if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error();
 
-            window.location.href = '/app/catways';
-        } catch (error) {
-            console.error(error);
-            alert('Erreur suppression catway');
-        }
+        window.location.href = '/app/catways';
+    } catch (error) {
+        console.error(error);
+        alert('Erreur suppression catway');
     }
+}
 </script>
-</body>
-</html>

@@ -12,7 +12,10 @@ router.get('/', async (req, res, next) => {
  res.render('index', { title: 'Accueil', error: null })
 });
 
-
+router.get('/logout', (req, res) => {
+    res.clearCookie('token');
+    return res.redirect('/');
+});
 
 router.get('/dashboard', private.checkJWT, async (req, res) => {
   try {
@@ -97,10 +100,19 @@ router.get('/app/reservations/:id', private.checkJWT, async (req, res) => {
       return res.status(404).send('Réservation non trouvée');
     }
 
+    const catway = await Catways.findOne({
+      catwayNumber: reservation.catwayNumber
+    });
+
+    if (!catway) {
+      return res.status(404).send('Catway lié introuvable');
+    }
+
     res.render('reservation', {
       title: 'Détail de la réservation',
       user: req.user,
-      reservation: reservation
+      reservation: reservation,
+      catway: catway
     });
   } catch (error) {
     console.log(error);

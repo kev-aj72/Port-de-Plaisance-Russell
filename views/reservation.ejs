@@ -13,6 +13,7 @@
                 <li><a href="/app/users">Utilisateur</a></li>
                 <li><a href="/app/catways">Catways</a></li>
                 <li><a href="/app/reservations">Réservation</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -84,22 +85,24 @@
         };
 
         try {
-            const res = await fetch('/reservations/' + id, {
+            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
-            const result = await res.text();
+            const result = await res.json();
             console.log('Réponse update :', result);
 
-            if (!res.ok) throw new Error(result);
+            if (!res.ok) {
+                throw new Error(result.message || 'Erreur modification');
+            }
 
-            alert('Modifié ');
+            alert('Réservation modifiée');
             window.location.reload();
         } catch (error) {
             console.error('Erreur modification :', error);
-            alert('Erreur modification ');
+            alert('Erreur modification');
         }
     }
 
@@ -107,20 +110,22 @@
         if (!confirm('Supprimer ?')) return;
 
         try {
-            const res = await fetch('/reservations/' + id , {
+            const res = await fetch('/catways/<%= catway.catwayNumber %>/reservations/' + id, {
                 method: 'DELETE'
             });
 
-            const result = await res.text();
+            const result = await res.json();
             console.log('Réponse delete :', result);
 
-            if (!res.ok) throw new Error(result);
+            if (!res.ok) {
+                throw new Error(result.message || 'Erreur suppression');
+            }
 
-            alert('Supprimé ');
+            alert('Réservation supprimée');
             window.location.href = '/app/reservations';
         } catch (error) {
             console.error('Erreur suppression :', error);
-            alert('Erreur suppression ');
+            alert('Erreur suppression');
         }
     }
 </script>
