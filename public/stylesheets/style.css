@@ -1,18 +1,45 @@
+/*css de base toute page*/
+
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    padding: 5px;
     background-color: #f4f4f4;
 }
 
-
 main {
-    max-width: 900px;
     margin: 40px auto;
     background: white;
     padding: 20px;
     border-radius: 8px;
 }
+
+h1 {
+    text-align: center;
+    color: #3a8de6;
+    font-size: 3em;
+}
+
+
+h2 {
+    text-align: center;
+    color: #3a8de6;
+    font-size: 2em;
+}
+
+/*bouton retour*/
+
+.back { 
+    display: inline-block;
+    margin-top: 20px;
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.back:hover {
+    color: black;
+}
+
+/*css navigation*/
 
 nav ul {
     list-style: none; 
@@ -21,11 +48,7 @@ nav ul {
     display: flex; 
     justify-content: center;
     gap: 20px;
-    background: #333;
-}
-
-nav ul li {
-    display: inline;
+    background: #3a8de6;
 }
 
 nav ul li a {
@@ -36,40 +59,47 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background: #555;
+    background: #0056b3;
 }
+
+/*css tableaux*/
 
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table, th, td {
-    border: 1px solid #ccc;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 th {
+    padding: 10px;
     background: #eee;
+    border: 1px solid black;
 }
 
-th, td {
+td {
     padding: 10px;
     text-align: center;
+    border: 1px solid black;
 }
 
-input, select {
-    padding: 6px;
-    width: 90%;
+/*css formulaire*/
+
+select {
+    padding: 8px 20px;
+}
+
+input{
+    padding: 8px ;
 }
 
 button {
     padding: 8px 12px;
     margin: 2px;
     border: none;
-    background: #007bff;
+    background: #3a8de6;
     color: white;
-    cursor: pointer;
     border-radius: 4px;
 }
 
@@ -84,10 +114,39 @@ form {
     margin-top: 20px;
 }
 
-form input {
-    flex: 1;
+/*css page index*/
+
+#documentation {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }
 
-h1, h2 {
+#documentationbtn {
+    color: black;
+    border: 1px solid yellow;
+    background-color: yellow;
+    border-radius: 5px;
+    padding: 6px 12px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#presentation {
     text-align: center;
+}
+
+#loginForm {
+    display: flex;
+    justify-content: center;
+}
+
+/*css footer*/
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 10px;
+    background: #3a8de6;
+    color: white;
 }

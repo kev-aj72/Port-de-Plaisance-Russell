@@ -6,6 +6,7 @@
     <title>Utilisateurs</title>
     <meta name="description" content="Gestion des catways et des réservations du port de plaisance Russell.">
 
+     <link rel="icon" type="image.png" href="images/favicon.png">
      <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
@@ -22,10 +23,22 @@
         </nav>
     </header>
 
-    <main>
-        <section>
-        <h2>Users</h2> <!--liste utillisateur-->
+    <main> 
+        
+        <section><!--formulaire de creation utilisateur-->
+            <h2>Utilisateurs</h2> 
+                <h3>Créer un utilisateur</h3>
 
+                <form action="/users" method="POST">
+                    <input type="text" name="username" placeholder="Nom" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Mot de passe" required>
+                    <button type="submit">Créer</button>
+                </form>
+        </section>
+
+        <section>
+       <!--tableau liste utillisateur-->
         <table>
             <thead>
                 <tr>
@@ -45,18 +58,10 @@
                 <% }) %>
             </tbody>
         </table>
-        </section>
-
-        <section>
-            <h3>Créer un utilisateur</h3>
-
-                <form action="/users" method="POST">
-                    <input type="text" name="username" placeholder="Nom" required>
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="Mot de passe" required>
-                    <button type="submit">Créer</button>
-                </form>
-        </section>
+        </section>  
     </main>
+    <footer>
+        <small>© 2026 - Application Port de Plaisance</small>
+    </footer>
 </body>
 </html>
