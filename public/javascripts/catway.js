@@ -1,5 +1,9 @@
    
-   // script modification Reservation
+   /**
+ * Modifie une réservation
+ * @param {string} id
+ * @param {string|number} catwayNumber
+ */
 
    async function updateReservation(id, catwayNumber) {
         const data = {
@@ -31,7 +35,11 @@
     }
 
 
-//script suppression reservation
+/**
+ * Supprime une réservation
+ * @param {string} id
+ * @param {string|number} catwayNumber
+ */
 
     async function deleteReservation(id, catwayNumber) {
         if (!confirm('Supprimer ?')) return;
@@ -55,7 +63,10 @@
         }
     }
 
-    //script modification catway
+    /**
+    * Modifie un catway
+    * @param {string|number} id
+    */
 
     async function updateCatway(id) {
     const data = {
@@ -81,7 +92,10 @@
     }
 }
 
-    // script suppression catway
+    /**
+    * Supprime un catway
+    * @param {string|number} id
+    */
 
 async function deleteCatway(id) {
     const ok = confirm('Supprimer ce catway ?');

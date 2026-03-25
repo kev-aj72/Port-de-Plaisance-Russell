@@ -1,0 +1,11 @@
+{
+    "source": {
+    "include": ["./services", "./routes", "./middlewares","./db","./models","public/javascripts"],
+    "includePattern" : ".js$",
+    "excludePattern" : "(node_modules|views|docs|env)"
+    },
+    "opts":{
+        "recurse": true,
+        "destination": "./docs"
+    }
+}

@@ -1,4 +1,8 @@
-    // script modification Reservation
+    /**
+    * Modifie une réservation
+    * @param {string} id
+    * @param {string|number} catwayNumber
+    */
 
    async function updateReservation(id, catwayNumber) {
         const data = {
@@ -29,8 +33,11 @@
         }
     }
 
-
-//script suppression reservation
+    /**
+    * Supprime une réservation
+   * @param {string} id
+    * @param {string|number} catwayNumber
+    */
 
     async function deleteReservation(id, catwayNumber) {
         if (!confirm('Supprimer ?')) return;

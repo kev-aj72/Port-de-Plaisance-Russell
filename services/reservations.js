@@ -1,7 +1,14 @@
 const Reservation = require('../models/reservation');
 const Catways = require('../models/catway');
 
-//fonction recupérer toute les reservation
+/**
+ * Récupère toutes les réservations d’un catway.
+ * @route GET /catways/:id/reservations
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.id - Numéro du catway
+ * @param {Object} res - Réponse Express
+ */
 
 exports.getAllByCatway = async (req, res) => {
     const catwayId = req.params.id;
@@ -21,7 +28,15 @@ exports.getAllByCatway = async (req, res) => {
     }
 };
 
-//fonction recupérer une reservation
+/**
+ * Récupère une réservation par son identifiant pour un catway donné.
+ * @route GET /catways/:id/reservations/:idReservation
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.id - Numéro du catway
+ * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {Object} res - Réponse Express
+ */
 
 exports.getById = async (req, res, next) => {
     const catwayId = req.params.id;
@@ -46,7 +61,19 @@ exports.getById = async (req, res, next) => {
     }
 };
 
-//fonction créer une reservation
+/**
+ * Crée une réservation pour un catway.
+ * @route POST /catways/:id/reservations
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.id - Numéro du catway
+ * @param {Object} req.body - Corps de la requête
+ * @param {string} req.body.clientName - Nom du client
+ * @param {string} req.body.boatName - Nom du bateau
+ * @param {string} req.body.startDate - Date de début
+ * @param {string} req.body.endDate - Date de fin
+ * @param {Object} res - Réponse Express
+ */
 
 exports.add = async (req, res) => {
     const catwayNumber = req.params.id;
@@ -75,7 +102,20 @@ exports.add = async (req, res) => {
     }
 };
 
-//fonction modifier une reservation
+/**
+ * Modifie une réservation d’un catway.
+ * @route PUT /catways/:id/reservations/:idReservation
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.id - Numéro du catway
+ * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {Object} req.body - Corps de la requête
+ * @param {string} [req.body.clientName] - Nom du client
+ * @param {string} [req.body.boatName] - Nom du bateau
+ * @param {string} [req.body.startDate] - Date de début
+ * @param {string} [req.body.endDate] - Date de fin
+ * @param {Object} res - Réponse Express
+ */
 
 exports.update = async (req, res) => {
     const catwayId = req.params.id;
@@ -117,7 +157,15 @@ exports.update = async (req, res) => {
     }
 };
 
-//fonction supprimer une reservation
+/**
+ * Supprime une réservation d’un catway.
+ * @route DELETE /catways/:id/reservations/:idReservation
+ * @param {Object} req - Requête Express
+ * @param {Object} req.params - Paramètres de la requête
+ * @param {string} req.params.id - Numéro du catway
+ * @param {string} req.params.idReservation - Identifiant de la réservation
+ * @param {Object} res - Réponse Express
+ */
 
 exports.delete = async (req, res) => {
     const catwayId = req.params.id;

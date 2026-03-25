@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const private = require('../middlewares/private');
+const privateMiddlewares = require('../middlewares/private');
 const Reservations = require('../models/reservation');
 const Catways = require('../models/catway');
 const User = require('../models/user');
 
 
-//route frontend checkJWT verifie que l'utilisateur est bien authentifié
-
-//connexion
+// page de connexion
+/**
+ * @route GET /
+ */
 
 router.get('/', (req, res) => {
  res.render('index', { title: 'Accueil', error: null })
 });
 
 //deconnexion
+/**
+ * @route GET /logout
+ */
 
 router.get('/logout', (req, res) => {
     res.clearCookie('token');
@@ -22,8 +26,11 @@ router.get('/logout', (req, res) => {
 });
 
 //route dashboard 
+/**
+ * @route GET /dashboard
+ */
 
-router.get('/dashboard', private.checkJWT, async (req, res) => {
+router.get('/dashboard', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const today = new Date();
 
@@ -38,8 +45,11 @@ router.get('/dashboard', private.checkJWT, async (req, res) => {
 });
 
 //route page catways
+/**
+ * @route GET /app/catways
+ */
 
-router.get('/app/catways', private.checkJWT, async (req, res) => {
+router.get('/app/catways', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const catways = await Catways.find().sort({ catwayNumber: 1});
 
@@ -52,8 +62,11 @@ router.get('/app/catways', private.checkJWT, async (req, res) => {
 });
 
 //route page catway vue individuelle
+/**
+ * @route GET /app/catways/:id
+ */
 
-router.get('/app/catways/:id', private.checkJWT, async (req, res) => {
+router.get('/app/catways/:id', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const catway = await Catways.findById(req.params.id);
 
@@ -71,8 +84,11 @@ router.get('/app/catways/:id', private.checkJWT, async (req, res) => {
 });
 
 //route page reservations 
+/**
+ * @route GET /app/reservations
+ */
 
-router.get('/app/reservations', private.checkJWT, async (req, res) => {
+router.get('/app/reservations', privateMiddlewares.checkJWT, async (req, res) => {
    try {
     const reservations = await Reservations.find().sort({ catwayNumber: 1, startDate: 1 });
 
@@ -84,8 +100,10 @@ router.get('/app/reservations', private.checkJWT, async (req, res) => {
 });
 
 //route page reservation vue individuelle
-
-router.get('/app/reservations/:id', private.checkJWT, async (req, res) => {
+/**
+ * @route GET /app/reservations/:id
+ */
+router.get('/app/reservations/:id', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const reservation = await Reservations.findById(req.params.id);
 
@@ -107,8 +125,11 @@ router.get('/app/reservations/:id', private.checkJWT, async (req, res) => {
 });
 
 //route page utillisateur
+/**
+ * @route GET /app/users
+ */
 
-router.get('/app/users', private.checkJWT, async (req, res) => {
+router.get('/app/users', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const users = await User.find().select('-password');
 
@@ -120,8 +141,11 @@ router.get('/app/users', private.checkJWT, async (req, res) => {
 });
 
 //route page utillisateur individuelle par email
+/**
+ * @route GET /app/users/:email
+ */
 
-router.get('/app/users/:email', private.checkJWT, async (req, res) => {
+router.get('/app/users/:email', privateMiddlewares.checkJWT, async (req, res) => {
   try {
     const userItem = await User.findOne({ email: req.params.email }).select('-password');
 
@@ -137,7 +161,9 @@ router.get('/app/users/:email', private.checkJWT, async (req, res) => {
 });
 
    //accée documentation
-
+  /**
+  * @route GET /documentation
+  */
     router.get('/documentation', (req, res) => {
   res.send('Documentation bientôt disponible');
 });
