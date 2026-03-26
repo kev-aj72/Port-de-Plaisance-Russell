@@ -91,7 +91,7 @@ exports.update = async (req, res) => {
     const email = req.params.email;
     
     if (email !== req.user.email) {
-        return res.status(403).json({ message: 'forbidden' });
+        return res.status(403).json({ message: 'Vous ne pouvez accéder qu’à vos propres informations' });
     }
 
     try {
@@ -107,7 +107,7 @@ exports.update = async (req, res) => {
 
         if (req.body.password && req.body.password.trim() !== '') {
             if (req.body.password.length < 6) {
-                return res.status(400).json({ message: 'password_too_short' });
+                return res.status(400).json({ message: 'password trop court' });
             }
 
                 user.password = req.body.password;
